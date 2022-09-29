@@ -1,0 +1,27 @@
+<h1 id="tableLabel">Podaci</h1>
+<p *ngIf="!people"><em>Loading...</em></p>
+<button class="btn btn-primary" (click)="loadData()">Učitaj</button>
+<button class="btn btn-primary" (click)="saveData()" style="margin-left: 5px">Spremi</button>
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="people">
+  <thead>
+    <tr>
+      <th>Ime</th>
+      <th>Prezime</th>
+      <th>Poštanski broj</th>
+      <th>Grad</th>
+      <th>Broj telefona</th>
+      <th>Poštanski broj ispravan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let person of people">
+      <td>{{ person.name }}</td>
+      <td>{{ person.surname }}</td>
+      <td>{{ person.zipCode }}</td>
+      <td>{{ person.city }}</td>
+      <td>{{ person.phoneNumber }}</td>
+      <td>{{ person.isZipValid }}</td>
+    </tr>
+  </tbody>
+</table>
+<p *ngIf="message">{{message}}</p>
