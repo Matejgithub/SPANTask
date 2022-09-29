@@ -1,4 +1,5 @@
 ﻿using SPANTask.Entities;
+using SPANTask.Enums;
 using System.Data.SqlClient;
 
 namespace SPANTask.Helpers
@@ -7,10 +8,12 @@ namespace SPANTask.Helpers
     {
         private readonly IConfiguration _config;
         private readonly ConvertHelper _convertHelper;
+        private readonly ValidateZipHelper _validateZipHelper;
         public DataHelper(string connectionString, IConfiguration config) : base(connectionString)
         {
             _config = config;
             _convertHelper = new ConvertHelper();
+            _validateZipHelper = new ValidateZipHelper();
         }
 
         public IEnumerable<Person> LoadData()
@@ -29,18 +32,17 @@ namespace SPANTask.Helpers
                 person.ZipCode = columns[2];
                 person.City = columns[3];
                 person.PhoneNumber = columns[4];
-                person.IsZipValid = int.TryParse(columns[2], out _);
+                person.IsZipValid = _validateZipHelper.Validate(columns[2]);
                 persons.Add(person);
             }
 
             return persons;
         }
 
-        public int? SaveData(List<Person> people)
+        public int SaveData(List<Person> people)
         {
             try
             {
-                //Creating SqlCommand object
                 string commandString = "AddPodaciItems";
 
                 var dtValidPeople = _convertHelper
@@ -59,25 +61,23 @@ namespace SPANTask.Helpers
                 command.CommandType = System.Data.CommandType.StoredProcedure;
                 SqlParameter tvpParam = command.Parameters.AddWithValue("@PodaciItems", dtValidPeople);
                 tvpParam.SqlDbType = System.Data.SqlDbType.Structured;
-
-                // Opening Connection  
-                Connection.Open();
-                // Executing the SQL command  
+ 
+                Connection.Open(); 
                 var retrunValue = command.ExecuteNonQuery();
 
-                int? resultId = null;
+                int resultId = 0;
 
                 if (retrunValue > 0 && retrunValue < people.Count)
                 {
-                    resultId = 1;
+                    resultId = (int)SavePeopleMessageType.NotAllSaved;
                 }
                 else if (retrunValue == 0)
                 {
-                    resultId = 2;
+                    resultId = (int)SavePeopleMessageType.NoneSaved;
                 }
                 else
                 {
-                    resultId = 3;
+                    resultId = (int)SavePeopleMessageType.AllSaved;
                 }
 
                 return resultId;

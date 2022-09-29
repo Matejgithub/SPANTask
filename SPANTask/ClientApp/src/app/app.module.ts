@@ -6,18 +6,12 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { PeopleComponent } from './people/people.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
-    HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
     PeopleComponent
   ],
   imports: [
@@ -26,9 +20,6 @@ import { PeopleComponent } from './people/people.component';
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: PeopleComponent, pathMatch: 'full' }
-      //{ path: 'counter', component: CounterComponent },
-      //{ path: 'fetch-data', component: FetchDataComponent }
-      /*{ path: 'people', component: PeopleComponent }*/
     ])
   ],
   providers: [],

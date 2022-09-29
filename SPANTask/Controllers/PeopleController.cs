@@ -25,7 +25,7 @@ namespace SPANTask.Controllers
         }
 
         [HttpPost("save-data")]
-        public int? SaveData(List<Person> people)
+        public int SaveData(List<Person> people)
         {
             return _dataHelper.SaveData(people);
         }
